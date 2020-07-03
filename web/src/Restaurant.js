@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useEffect } from "react"
-import withResult from "./withResults"
+import Results from './Results'
 
 
 function Restaurant(props) {
@@ -37,4 +37,4 @@ function Restaurant(props) {
     }
 }
 
-export default withResult(Restaurant)
+export default Results(Restaurant)

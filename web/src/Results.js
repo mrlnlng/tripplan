@@ -11,7 +11,7 @@ import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 
 const useStyles = makeStyles({
-    result: {
+    restaurant: {
         display: "flex",
         justifyContent: "space-between",
         flexDirection: "row",
@@ -52,7 +52,6 @@ const useCardStyles = makeStyles({
         transform: 'translate(0%,10%)'
     }
 })
-
 
 function Restaurant({ rating, name, image_url, review_count, }) {
     const classes = useCardStyles();
@@ -124,7 +123,7 @@ function Results(props) {
             <>
                 <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
                 <div className={classes.subtitle}>{restaurants.length} places found in {cityName}</div>
-                <div className={classes.result}>
+                <div className={classes.restaurant}>
                     {restaurants.map(restaurant => <Restaurant {...restaurant} />)}
                 </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from 'react'
 import { useEffect } from "react"
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card';
@@ -53,15 +53,14 @@ const useCardStyles = makeStyles({
     }
 })
 
-
-function Restaurant({ rating, name, image_url, review_count, }) {
+function Result({ rating, name, image_url, review_count, }) {
     const classes = useCardStyles();
-    
+
     let ratingStar = []
-    for(let i = 1; i <= rating; i++){
+    for (let i = 1; i <= rating; i++) {
         ratingStar.push(1)
     }
-    if(rating % 1 != 0){
+    if (rating % 1 != 0) {
         ratingStar.push(0.5)
     }
 
@@ -80,11 +79,11 @@ function Restaurant({ rating, name, image_url, review_count, }) {
                     <Typography variant="caption" gutterBottom>{name}</Typography>
                     <Typography variant="body2" gutterBottom>
                         <div className={classes.rating}>
-                            {ratingStar.map((rating) => rating == 1 ?  
-                                <StarIcon className={classes.icons}> </StarIcon> :  <StarHalfIcon className={classes.icons}> </StarHalfIcon>)}
+                            {ratingStar.map((rating) => rating == 1 ?
+                                <StarIcon className={classes.icons}> </StarIcon> : <StarHalfIcon className={classes.icons}> </StarHalfIcon>)}
 
                         </div>
-                               <div>{review_count} reviews</div>
+                        <div>{review_count} reviews</div>
                     </Typography>
                 </CardContent>
             </CardActionArea>
@@ -92,44 +91,24 @@ function Restaurant({ rating, name, image_url, review_count, }) {
     )
 }
 
+const UpdatedComponent = (OriginalComponent) => {
+    function NewResults() {
+        if (loading) {
+            return "Loading"
+        } else {
+            return (
 
+                <>
+                    <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
+                    <div className={classes.subtitle}>{restaurants.length} places found in {cityName}</div>
+                    <div className={classes.result}>
+                        {restaurants.map(restaurant => <Result {...restaurant} />)}
+                    </div>
 
-function Results(props) {
-    const classes = useStyles();
-    const { location, selectedButtons } = props.location.state
-    const cityName = location.split(" ").map((name) => name[0].toUpperCase() + name.slice(1)).join(" ")
-    const [restaurants, setRestaurants] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        (async function () {
-            let response = await fetch("http://127.0.0.1:5000/restaurants?location=" + location)
-            let json = await response.json()
-            let newRestaurants = []
-            if (Array.isArray(json["businesses"])) {
-                newRestaurants = json["businesses"]
-            }
-            setRestaurants(newRestaurants)
-            setLoading(false)
-        })()
-
-
-    }, [])
-    console.log(restaurants)
-    if (loading) {
-        return "Loading"
-    } else {
-        return (
-
-            <>
-                <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
-                <div className={classes.subtitle}>{restaurants.length} places found in {cityName}</div>
-                <div className={classes.result}>
-                    {restaurants.map(restaurant => <Restaurant {...restaurant} />)}
-                </div>
-
-            </>)
+                </>)
+        }
     }
+    return NewResults
 }
 
-export default Results
+export default UpdatedComponent
