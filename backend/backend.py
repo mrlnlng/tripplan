@@ -2,6 +2,8 @@ from flask import Flask
 from flask import request
 import requests
 from flask_cors import CORS
+import json
+
 app = Flask(__name__)
 CORS(app)
 
@@ -15,7 +17,14 @@ def handle_restaurants():
     query = request.full_path.split("?")[-1]
     url = f"{base_url}{query}"
     response = requests.request("GET", url, headers=headers)
-    return response.text
+    businesses = response.json()["businesses"]
+    businesses_info = []
+    for business in businesses:
+        restaurant_info = dict()
+        restaurant_info = {"image_url": business["image_url"], "name": business["name"], "rating": business["rating"], "price": business["price"], "review_count": business["review_count"]}
+        businesses_info.append(restaurant_info)
+    
+    return json.dumps(businesses_info)
 
 app.run()
 

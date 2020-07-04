@@ -66,14 +66,13 @@ function Search() {
     }
     
     const classes = useStyles()
-    console.log("location",{location,selectedButtons})
     return (
         <div className="Search">
             <input
                 type="text"
                 placeholder="Where to?"
                 value={location}
-                name="location"Mai
+                name="location"
                 className={classes.input}
                 onChange={handleChange}>
             </input>
