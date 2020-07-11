@@ -62,10 +62,10 @@ function App() {
                 return <Component {...props}></Component>
               }} />
 
-              {/* <Route path="/hotels" component={(props) => {
+              <Route path="/hotels" component={(props) => {
                 const url = "http://127.0.0.1:5000/restaurants?location=" + props.location.state.location
                 return withFetch(Results, url)
-              }} /> */}
+              }} />
 
               {/* <Route path="/marlene" component={() => (<Restaurants2 data={data2} />)} /> */}
             </Switch>
