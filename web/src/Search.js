@@ -9,7 +9,7 @@ const useStyles = makeStyles({
         flexDirection: 'column'
     },
     input: {
-        border:"0",
+        border: "0",
         height: '1.4rem',
         padding: '.4rem .8rem',
         borderRadius: '.2rem',
@@ -37,7 +37,7 @@ const MyButton = styled('button')({
     borderRadius: '.2rem',
     width: '100%',
     outline: 'none',
-    color: '000000'
+    // color: '000000'
 
 })
 
@@ -53,18 +53,23 @@ function Search() {
         setLocation(e.target.value)
     }
 
-    function createChangeHandler(buttonName){
+    function createChangeHandler(buttonName) {
         function buttonHandler() {
             setButtons(prevState => {
-                let newSelectedButtons = JSON.parse(JSON.stringify(prevState))
-                newSelectedButtons[buttonName] = !newSelectedButtons[buttonName]
+                let newSelectedButtons = {
+                    "hotel": false,
+                    "thingsToDo": false,
+                    "restaurants": false
+                }
+                // JSON.parse(JSON.stringify(prevState))
+                newSelectedButtons[buttonName] = true
                 return newSelectedButtons
             })
-            
+
         }
         return buttonHandler
     }
-    
+
     const classes = useStyles()
     return (
         <div className="Search">
@@ -78,37 +83,38 @@ function Search() {
             </input>
 
             <form className={classes.form}>
-                <MyButton 
+                <MyButton
                     type="button"
-                    name="hotel" 
+                    name="hotel"
                     onClick={createChangeHandler("hotel")}
-                    style={{borderColor: selectedButtons["hotel"] ? "black" : "#E1E1E1"}}
-                    >Hotels</MyButton>
-                <MyButton 
+                    style={{ borderColor: selectedButtons["hotel"] ? "black" : "#E1E1E1" }}
+                >Hotels</MyButton>
+                <MyButton
                     type="button"
-                    name="thingsToDo" 
+                    name="thingsToDo"
                     onClick={createChangeHandler("thingsToDo")}
-                    style={{borderColor: selectedButtons["thingsToDo"] ? "black" : "#E1E1E1"}}
-                    >Things to do</MyButton>
-                <MyButton 
+                    style={{ borderColor: selectedButtons["thingsToDo"] ? "black" : "#E1E1E1" }}
+                >Things to do</MyButton>
+                <MyButton
                     type="button"
-                    name="restaurants" 
+                    name="restaurants"
                     onClick={() => createChangeHandler("restaurants")()}
-                    style={{borderColor: selectedButtons["restaurants"] ? "black" : "#E1E1E1"}}
-                    >Restaurants</MyButton>
+                    style={{ borderColor: selectedButtons["restaurants"] ? "black" : "#E1E1E1" }}
+                >Restaurants</MyButton>
             </form>
-            <Link to={{
-                pathname: "/results",
-                state: {location: location, selectedButtons: selectedButtons}
+            <Link to=
+                {{
+                    pathname: "/results",
+                    state: { location: location, selectedButtons: selectedButtons }
                 }}>
-                    
-            <MyButton style={{
-                backgroundColor: "#83CFC8",
-                color: "#FFFFFF",
-                border: "0",
-                borderRadius: ".2rem",
-                height: '2.5rem'
-            }}>Let's Go!</MyButton>
+
+                <MyButton style={{
+                    backgroundColor: "#83CFC8",
+                    color: "#FFFFFF",
+                    border: "0",
+                    borderRadius: ".2rem",
+                    height: '2.5rem'
+                }}>Let's Go!</MyButton>
             </Link>
 
         </div>

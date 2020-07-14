@@ -16,19 +16,20 @@ const theme = createMuiTheme({
     body2: {
       fontSize: ".7rem",
       color: "grey"
-    }},
+    }
+  },
 
-    palette: {
-      primary: {
-        main : "#429a8f"
+  palette: {
+    primary: {
+      main: "#429a8f"
 
-      },
-      secondary: {
-        main: "#83CFC8"
-      }
     },
-    
-  }
+    secondary: {
+      main: "#83CFC8"
+    }
+  },
+
+}
 )
 
 const useStyles = makeStyles({
@@ -56,16 +57,25 @@ function App() {
               <Route path="/" exact component={Search} />
               {/* <Route path="/results" component={Results} /> */}
               <Route path="/results" component={(props) => {
-                const url = "http://127.0.0.1:5000/restaurants?location=" + props.location.state.location
+                
+                if (props.location.state.selectedButtons.hotel) {
+                  const url = "http://127.0.0.1:5000/hotels?location=" + props.location.state.location
+                  let Component = withFetch(Results, url)
+                  return <Component {...props}></Component>
+                } 
+                
+                 else {
+                  const url = "http://127.0.0.1:5000/restaurants?location=" + props.location.state.location
+                  let Component = withFetch(Results, url)
+                  return <Component {...props}></Component>
+                }
+
+              }} />
+
+              {/* <Route path="/hotels" component={(props) => {
+                const url = "http://127.0.0.1:5000/hotels?location=" + props.location.state.location
                 let Component = withFetch(Results, url)
-
-                return <Component {...props}></Component>
-              }} />
-
-              <Route path="/hotels" component={(props) => {
-                const url = "http://127.0.0.1:5000/restaurants?location=" + props.location.state.location
-                return withFetch(Results, url)
-              }} />
+              }} /> */}
 
               {/* <Route path="/marlene" component={() => (<Restaurants2 data={data2} />)} /> */}
             </Switch>
