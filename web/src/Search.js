@@ -44,9 +44,9 @@ const MyButton = styled('button')({
 function Search() {
     const [location, setLocation] = useState("")
     const [selectedButtons, setButtons] = useState({
-        "hotel": false,
-        "thingsToDo": false,
-        "restaurants": false
+        "hotels": false,
+        "places": false,
+        "restaurants": true
     })
 
     const handleChange = (e) => {
@@ -57,8 +57,8 @@ function Search() {
         function buttonHandler() {
             setButtons(prevState => {
                 let newSelectedButtons = {
-                    "hotel": false,
-                    "thingsToDo": false,
+                    "hotels": false,
+                    "places": false,
                     "restaurants": false
                 }
                 // JSON.parse(JSON.stringify(prevState))
@@ -85,22 +85,22 @@ function Search() {
             <form className={classes.form}>
                 <MyButton
                     type="button"
-                    name="hotel"
-                    onClick={createChangeHandler("hotel")}
-                    style={{ borderColor: selectedButtons["hotel"] ? "black" : "#E1E1E1" }}
-                >Hotels</MyButton>
-                <MyButton
-                    type="button"
-                    name="thingsToDo"
-                    onClick={createChangeHandler("thingsToDo")}
-                    style={{ borderColor: selectedButtons["thingsToDo"] ? "black" : "#E1E1E1" }}
-                >Things to do</MyButton>
-                <MyButton
-                    type="button"
                     name="restaurants"
                     onClick={() => createChangeHandler("restaurants")()}
                     style={{ borderColor: selectedButtons["restaurants"] ? "black" : "#E1E1E1" }}
                 >Restaurants</MyButton>
+                <MyButton
+                    type="button"
+                    name="hotels"
+                    onClick={createChangeHandler("hotels")}
+                    style={{ borderColor: selectedButtons["hotels"] ? "black" : "#E1E1E1" }}
+                >Hotels</MyButton>
+                <MyButton
+                    type="button"
+                    name="places"
+                    onClick={createChangeHandler("places")}
+                    style={{ borderColor: selectedButtons["places"] ? "black" : "#E1E1E1" }}
+                >Places</MyButton>
             </form>
             <Link to=
                 {{

@@ -6,6 +6,10 @@ import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Button, ButtonGroup } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import useFetch from './withFetch'
+import Loader from "./Loader"
+
+
 const useStyles = makeStyles(theme => ({
     result: {
         display: "flex",
@@ -80,9 +84,11 @@ const useCardStyles = makeStyles({
 
 })
 
-function Result({ rating, name, image_url, review_count, price }) {
-    const classes = useCardStyles();
 
+function Result(props) {
+    const classes = useCardStyles();
+    const { rating, name, image_url, review_count, price } = props
+    // const { loading } = loading
     let ratingStar = []
     for (let i = 1; i <= rating; i++) {
         ratingStar.push(1)
@@ -117,55 +123,30 @@ function Result({ rating, name, image_url, review_count, price }) {
     )
 }
 
+function getSelected(selectedButtons){
+    for (let key of Object.keys(selectedButtons)){
+        if (selectedButtons[key]){
+            return key
+        }
+    }
+}
 
 export function Results(props) {
-    const { data } = props
     const classes = useStyles();
     const { location, selectedButtons } = props.location.state
     const cityName = location.split(" ").map((name) => name[0].toUpperCase() + name.slice(1)).join(" ")
     const matches = useMediaQuery('(max-width:900px)');
     const smallerMatches = useMediaQuery('(max-width:400px)');
-
-
-
-    let numCols
-    if (smallerMatches) {
-        numCols = 1
-    } else if (matches) {
-        numCols = 2
-    } else {
-        numCols = 5
-    }
-
-
-
-    const reverseIndex = (i) => {
-        let y = Math.floor(i / numCols)
-        let x = i - y * numCols
-
-        return [x, y]
-    }
-
-
-    const columns = []
-    for (let i = 0; i < numCols; i++) {
-        columns[i] = []
-    }
-
-
-    for (let i = 0; i < data.length; i++) {
-        const [x, y] = reverseIndex(i)
-        columns[x][y] = data[i]
-    }
-
     const [buttons, setButton] = useState(selectedButtons)
-
+    const selected = getSelected(buttons)
+    // alert(selected)
+    const [loading, data] = useFetch(`http://127.0.0.1:5000/${selected}?location=` + props.location.state.location)
     function createButtonHandler(buttonName) {
         function handleClick() {
             setButton(() => {
                 let newButtons = {
-                    "hotel": false,
-                    "thingsToDo": false,
+                    "hotels": false,
+                    "places": false,
                     "restaurants": false
                 }
 
@@ -173,39 +154,76 @@ export function Results(props) {
                 return newButtons
             }
 
-        )}
+            )
+        }
         return handleClick
     }
 
-    return (
+    if (loading) {
+        return (
+            <Loader />)
+    }
+    else {
+
+        let numCols
+        if (smallerMatches) {
+            numCols = 1
+        } else if (matches) {
+            numCols = 2
+        } else {
+            numCols = 5
+        }
+
+        const reverseIndex = (i) => {
+            let y = Math.floor(i / numCols)
+            let x = i - y * numCols
+
+            return [x, y]
+        }
 
 
-        <>
-            <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
-            <div>
-                <ButtonGroup size="medium" color="primary" className={classes.buttonGroup}>
-                    <Button variant={buttons["restaurants"] ? "contained" : "outlined"}  onClick={createButtonHandler("restaurants")}>Restaurants</Button>
-                    <Button variant={buttons["hotel"] ? "contained" : "outlined"} onClick={createButtonHandler("hotel")} >Hotels</Button>
-                    <Button variant={buttons["thingsToDo"] ? "contained" : "outlined"} onClick={createButtonHandler("thingsToDo")}>Places</Button>
-                </ButtonGroup>
-
-            </div>
-            <div className={classes.subtitle}>{data.length} places found in {cityName}</div>
+        const columns = []
+        for (let i = 0; i < numCols; i++) {
+            columns[i] = []
+        }
 
 
-            <div className={classes.row}>
+        for (let i = 0; i < data.length; i++) {
+            const [x, y] = reverseIndex(i)
+            columns[x][y] = data[i]
+        }
 
 
-                {columns.map(col => (
-                    <div className={classes.column}>
-                        {col.map((element, index) => (
-                            <Result key={index} {...element} />
-                        ))}
-                    </div>
-                ))}
-            </div>
-        </>
-    )
+
+        return (
+            <>
+                <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
+                <div>
+                    <ButtonGroup size="medium" color="primary" className={classes.buttonGroup}>
+                        <Button variant={buttons["restaurants"] ? "contained" : "outlined"} onClick={createButtonHandler("restaurants")}>Restaurants</Button>
+                        <Button variant={buttons["hotels"] ? "contained" : "outlined"} onClick={createButtonHandler("hotels")} >Hotels</Button>
+                        <Button variant={buttons["places"] ? "contained" : "outlined"} onClick={createButtonHandler("places")}>Places</Button>
+                    </ButtonGroup>
+
+                </div>
+                <div className={classes.subtitle}>{data.length} places found in {cityName}</div>
+
+
+                <div className={classes.row}>
+
+
+                    {columns.map(col => (
+                        <div className={classes.column}>
+                            {col.map((element, index) => (
+                                <Result key={index} {...element} />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </>
+        )
+    }
+
 }
 
 export default Results

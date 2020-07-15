@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Search from './Search';
 import Results from './Results';
-import { withFetch } from "./withFetch"
+// import useFetch, { withFetch } from "./withFetch"
 import { createMuiTheme } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/styles"
 import { makeStyles } from '@material-ui/core';
@@ -56,21 +56,22 @@ function App() {
             <Switch>
               <Route path="/" exact component={Search} />
               {/* <Route path="/results" component={Results} /> */}
-              <Route path="/results" component={(props) => {
+              {/* <Route path="/results" component={(props) => { */}
+              <Route path="/results" component={Results} />
                 
-                if (props.location.state.selectedButtons.hotel) {
+                 {/* if (props.location.state.selectedButtons.hotel) {
                   const url = "http://127.0.0.1:5000/hotels?location=" + props.location.state.location
                   let Component = withFetch(Results, url)
                   return <Component {...props}></Component>
                 } 
-                
+
                  else {
                   const url = "http://127.0.0.1:5000/restaurants?location=" + props.location.state.location
                   let Component = withFetch(Results, url)
                   return <Component {...props}></Component>
-                }
+                } */}
 
-              }} />
+              
 
               {/* <Route path="/hotels" component={(props) => {
                 const url = "http://127.0.0.1:5000/hotels?location=" + props.location.state.location
