@@ -1,7 +1,6 @@
 import requests
 import json
 import bs4
-import datetime
 import re
 
 
@@ -11,16 +10,10 @@ def create_url(location):
 
 def scrape_airbnb(location):
     url = create_url(location)
-    # print(url)
     response = requests.request("GET", url)
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
 
     information_list = []
-    names_list = []
-    image_urls_list = []
-    ratings_list = []
-    reviews_list = []
-
     
     for listing in soup.findAll("div",{"itemprop" : "itemListElement"}):
         string = listing.text.replace("SUPERHOST", "")
@@ -28,7 +21,6 @@ def scrape_airbnb(location):
         title = re.findall(r"content=\"(.+) - null", listing_html)
         # print(title)
         name = title[0]
-        print(name)
         # name = title[0]
         
         rating_regex = re.findall(r"Rating ([0-9]\.([0-9]+)) out of 5", listing_html)
