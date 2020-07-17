@@ -6,34 +6,58 @@ import bs4
 session = requests_html.HTMLSession()
 session.browser
 
-def getID(location):
-    resp = session.get(f"https://www.tripadvisor.ca/Search?q={location}")
-    resp.html.render(sleep=5,retries=1)
-    links = (list(resp.html.links))
+def create_url(location):
+    url = f"https://www.google.com/search?q={location}+places"
+    resp = session.get(url)
+    links = resp.html.links
     for link in links:
-        string = str(link)
-        location = re.findall(r"-g(\d+)-", string)
-        if len(location) != 0:
-            locationId = location[0]
-            return locationId
-    
+        location_link = re.findall(r"(\/m\/.*?)&", link)
+        if len(location_link) != 0:
+            locationID = location_link[0]
+            return locationID
 
-def scrape_trip_advisor(location):
-    location_id = getID(location)
-    resp = session.get(f"https://www.tripadvisor.ca/Attractions-g{location_id}-Activities-a_allAttractions.true")
+def scrape_google(location):
+    locationID = create_url(location)
+    url = f"https://www.google.com/travel/things-to-do/see-all?dest_mid={locationID}"
+    resp = session.get(url)
     soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-    listing_html = soup.prettify()
-    elements = re.findall(r"\"location\":{\"name\":(.*?)\"minPriceInfo\"", listing_html)
-    attractions_list = []
-    for element in elements:
-        name = re.findall(r"\"name\":\"(.*?)\"", element)[0]
-        reviews = re.findall(r"\"reviewCount\":(\d+)", element)[0]
-        image_url = re.findall(r"\"url\":\"(h.*?)\"},{\"", element)[-1]
-        rating = re.findall(r"\"reviewScore\":(\d+)", element)[0]
+    information_list = []
+    names_set = set()
+    for element in soup.findAll("div", {"role" : "listitem"}):
+      
+        string = element.text
+        name_list = re.findall(r"([\w|\D]+?)\d", string)
+        if len(name_list) != 0 and name_list[0] not in names_set:
+            name = name_list[0]
+            names_set.add(name)
+        else:
+            continue
+
+        element_html = element.prettify()
+        image_list = re.findall(r"src=\"(.*?)\"", element.prettify())
+        if len(image_list) != 0:
+            image_url = image_list[0]
+        else:
+            image_url = None
+        
+        rating_list = re.findall(r"(\d.\d)", string)
+        if len(rating_list) != 0 and float(rating_list[0]) < 5:
+            rating = rating_list[0]
+        else:
+            rating = None
+
+        review_list = re.findall(r"\(([\d|,]+)\)", string)
+        if len(review_list) != 0:  
+            reviews = review_list[0]
+        else:
+            reviews = None
+
         element_dict = dict(rating=rating,image_url=image_url,name=name,review_count=reviews)
-        attractions_list.append(element_dict)
+        information_list.append(element_dict)
+    
+    print(information_list)
+    
+    
+    return information_list
 
-    return attractions_list
-
-
-# scrape_trip_advisor("Montreal")
+scrape_google("montreal")

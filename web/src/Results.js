@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from "@material-ui/core/Typography"
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { Button, ButtonGroup } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import useFetch from './withFetch'
@@ -57,6 +58,7 @@ const useCardStyles = makeStyles({
         display: "flex",
         flexDirection: "column",
         maxHeight: "auto",
+        maxWidth: "25vw",
         borderRadius: "20px",
         boxShadow: "10px 10px 15px rgba(64, 64, 64, 0.4)"
         // flex
@@ -90,6 +92,7 @@ function Result(props) {
     const { rating, name, image_url, review_count, price } = props
     // const { loading } = loading
     let ratingStar = []
+
     for (let i = 1; i <= rating; i++) {
         ratingStar.push(1)
     }
@@ -97,6 +100,9 @@ function Result(props) {
         ratingStar.push(0.5)
     }
 
+    const missingStarsNum = 5 - ratingStar.length
+    const missingStars = Array(missingStarsNum).fill().map(()=> (<StarBorderIcon className={classes.icons}></StarBorderIcon>))
+ 
     return (
         <div className={classes.card}>
             <div>
@@ -112,7 +118,7 @@ function Result(props) {
                     <div className={classes.rating}>
                         {ratingStar.map((rating, index) => rating === 1 ?
                             <StarIcon key={index} className={classes.icons}> </StarIcon> : <StarHalfIcon key={index} className={classes.icons}> </StarHalfIcon>)}
-
+                        {missingStars}
                     </div>
                     <div>
                         {review_count} reviews
