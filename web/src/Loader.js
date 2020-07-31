@@ -1,11 +1,27 @@
 import React from 'react'
-import Typography from "@material-ui/core/Typography"
+import { makeStyles } from '@material-ui/core/styles'
+import Spinner from "react-spinkit"
+
+
+
+const SkeletonStyles = makeStyles(theme => ({
+  
+    colored : {
+        color : theme.palette.primary.main,
+        transform: "translate(0%,10vh)"
+    }
+}))
 
 function Loader() {
-    return(
-        <div>
-            <Typography variant ="h4"> Loading... </Typography>
-        </div>
+    const classes = SkeletonStyles()
+   
+    return (
+        <>
+            <Spinner name="ball-spin-fade-loader" className={classes.colored} fadeIn='none' />
+            
+             
+
+        </>
     )
 }
 

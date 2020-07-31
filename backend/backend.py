@@ -5,6 +5,8 @@ import json
 from restaurant import scrape_restaurant
 from airbnb import scrape_airbnb
 from places import scrape_google
+from places_link import find_link
+import asyncio
 
 
 app = Flask(__name__)
@@ -29,6 +31,18 @@ def handle_airbnb():
 @app.route('/places')
 def handle_places():
     location = request.full_path.split("=")[-1]
-    return json.dumps(scrape_google(location))
+    resp = scrape_google(location)
+    # print(resp)
+    return json.dumps(resp)
+# @app.route('/places/link')
+#     return 
 
-app.run()
+@app.route('/places/google')
+def handle_google():
+    url = request.full_path.split("=")[-1]
+    # print()
+    link = find_link(url)
+    return json.dumps(link)
+
+if __name__ == "__main__":
+    app.run()

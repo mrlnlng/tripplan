@@ -1,6 +1,5 @@
 import requests
 import json
-from flask import request
 
 def scrape_restaurant(location):
     base_url = "https://api.yelp.com/v3/businesses/search?limit=50&term=food&sort_by=review_count&"
@@ -14,7 +13,7 @@ def scrape_restaurant(location):
     businesses_info = []
     for business in businesses:
         restaurant_info = dict()
-        restaurant_info = {"image_url": business["image_url"], "name": business["name"], "rating": business["rating"], "price": business["price"], "review_count": business["review_count"]}
+        restaurant_info = {"image_url": business["image_url"], "name": business["name"], "rating": business["rating"], "price": business["price"], "review_count": business["review_count"], "link":business["url"]}
         businesses_info.append(restaurant_info)
     
     return businesses_info

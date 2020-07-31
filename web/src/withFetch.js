@@ -8,7 +8,7 @@ function useFetch(url){
     useEffect(() => {
 
         (async function () {
-            let response = await fetch(url)
+           let response = await fetch(url)
             let json = await response.json()
             setData(json)
             setLoading(false)
@@ -17,7 +17,7 @@ function useFetch(url){
         )()
     }, [url])
     
-    return [loading,data]
+    return [loading,data, setLoading]
 }
 
 
