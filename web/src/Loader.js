@@ -8,7 +8,7 @@ const SkeletonStyles = makeStyles(theme => ({
   
     colored : {
         color : theme.palette.primary.main,
-        transform: "translate(0%,10vh)"
+        transform: "translate(0%,20vh)"
     }
 }))
 

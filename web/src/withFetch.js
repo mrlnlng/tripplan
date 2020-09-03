@@ -2,16 +2,16 @@
 import { useEffect, useState} from "react"
 // import Loader from "./Loader"
 
-function useFetch(url){
+export function useFetch(url){
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState(undefined)
     useEffect(() => {
 
         (async function () {
            let response = await fetch(url)
-            let json = await response.json()
-            setData(json)
-            setLoading(false)
+           let json = await response.json()
+           setData(json)
+           setLoading(false)
 
         }
         )()

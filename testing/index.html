@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="search" id="address-input" placeholder="Where are we going?" />
+
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.19.0"></script>
+    <script>
+        var placesAutocomplete = places({
+            appId: 'plDSRXLA2JDS',
+            apiKey: '82835bd00915dee9ad1c6bd555d772d3',
+            container: document.querySelector('#address-input')
+        });
+    </script>
+</body>
+
+</html>

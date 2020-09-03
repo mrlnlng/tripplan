@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Search from './Search';
 import Results from './Results';
+import Undefined from './Undefined'
 // import useFetch, { withFetch } from "./withFetch"
 import { createMuiTheme } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/styles"
@@ -25,39 +26,49 @@ const theme = createMuiTheme({
 
     },
     secondary: {
-      main: "#83CFC8"
-    }
+      main: "#86C3B9"
+    },
+    // info: {
+    //   main: "linear-gradient(45deg, #429A8F 30%, #48B09E 90%)",
+    // }
   },
 
 }
 )
 
 const useStyles = makeStyles({
-  App: {
-    display: 'flex',
-    flexDirection: 'column',
+  App:  props => ({
+    // display: 'flex',
+    // flexDirection: 'column',
     textAlign: 'center',
     alignItems: 'center',
-    margin: '5vmin',
+    // margin: '5vmin',
     fontFamily: "Raleway",
-  },
+    margin: "0",
+    // overflowX : props.overflow ? "hidden" : "auto"
+    // overflowX : props.overflow ? "hidden" : "auto"
+    // overflowX: "hidden"
+  }), 
 
 })
 
 function App() {
-  const classes = useStyles()
+  const routeName = window.location.pathname
+  const shouldOverflow = (routeName === "/results" )
+  const classes = useStyles({overflow : shouldOverflow})
   return (
     <>
       <ThemeProvider theme={theme}>
         <Router>
           {/* <Link to={{pathname : "/restaurants", state : {location : "new york"}}}>Please click me...</Link> */}
           <div className={classes.App}>
-            <Header />
+            {/* <Header /> */}
             <Switch>
               <Route path="/" exact component={Search} />
               {/* <Route path="/results" component={Results} /> */}
               {/* <Route path="/results" component={(props) => { */}
               <Route path="/results" component={Results} />
+              <Route component={Undefined} />
                 
                  {/* if (props.location.state.selectedButtons.hotel) {
                   const url = "http://127.0.0.1:5000/hotels?location=" + props.location.state.location

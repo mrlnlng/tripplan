@@ -10,6 +10,8 @@ import LanguageIcon from '@material-ui/icons/Language';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import useFetch from './withFetch'
 import Loader from "./Loader"
+import NavBar from "./NavBar"
+import airbnbIcon from "./airbnb.png"
 
 export const useStyles = makeStyles(theme => ({
     result: {
@@ -23,7 +25,10 @@ export const useStyles = makeStyles(theme => ({
     },
     header: {
         fontSize: "2rem",
-        margin: "1rem"
+        margin: "7rem 0rem 1rem 0rem",
+        width: "100vw",
+        justifyContent: "center"
+
 
     },
 
@@ -46,24 +51,52 @@ export const useStyles = makeStyles(theme => ({
     },
     row: {
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        justifyContent: "center"
     },
-    colored : {
-        color : "grey",
+    colored: {
+        color: "grey",
+    },
+    navbar: {
+        zIndex: "10"
+    },
+
+    buttonClicked: {
+        background: "linear-gradient(45deg, #429A8F 30%, #48B09E 90%)",
+        color: "white",
+        border: "none"
+    },
+    buttonUnclicked: {
+        background: "white",
+        color: "black",
+    },
+    loadingPage: {
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center"
+    },
+    resultPage: {
+        overflow: "hidden"
     }
+
+
+
+
 })
 )
 
 const useCardStyles = makeStyles({
-    card: {
+    card: props => ({
         margin: "1rem",
         display: "flex",
         flexDirection: "column",
         maxHeight: "auto",
-        maxWidth: "25vw",
+        maxWidth: props.smallerMatches ? "70vw" : "25vw",
         borderRadius: "20px",
-        boxShadow: "10px 10px 15px rgba(64, 64, 64, 0.4)"
-    },
+        boxShadow: "10px 10px 15px rgba(64, 64, 64, 0.4)",
+        // zIndex: "-1"
+    }),
     rating: {
         display: "flex",
         justifyContent: "center",
@@ -79,19 +112,38 @@ const useCardStyles = makeStyles({
         justifyContent: "center",
         margin: "1rem",
     },
-    media: {
-        maxHeight: "100%",
+    media: props => ({
+        // maxHeight : "8rem",
+        // width : "100%",
         maxWidth: "100%",
-        borderRadius: "20px 20px 0px 0px"
+        width: "100%",
+        maxHeight: props.crop ? "16vh" : "100%",
+        borderRadius: "20px 20px 0px 0px",
+        objectFit: props.crop ? "cover" : "inherit",
+    }),
+    airbnb: {
+        height: "auto",
+        width: "20%",
+        transform: "translate(0%, -20%)"
     },
+    name: {
+        display: "flex",
+        justifyContent: "center"
+    },
+    responsiveText: {
+        fontSize: "1vmin"
+    }
 
 })
 
-const useGooglePlaces = (url_place, fetchNow) => {
+const useGooglePlaces = (url_place) => {
     const encodedUrl = encodeURIComponent(url_place)
     const url = `http://127.0.0.1:5000/places/google?l=` + encodedUrl
+    // console.log(url)
     const [link, setLink] = useState("")
     const [hasLink, setHasLink] = useState(false)
+    const [fetchNow, setFetchNow] = useState(false)
+    const [linkExists, setLinkExists] = useState(false)
 
     useEffect(() => {
 
@@ -108,58 +160,82 @@ const useGooglePlaces = (url_place, fetchNow) => {
                 if (json !== null) {
                     newLink = json[0]
                     newHasLink = true
-                    fetchNow = false
+                    setFetchNow(false)
+                    setLinkExists(true)
                     console.log("Found new link", newLink)
+                }
+                else {
+                    newLink = "http://localhost:3000/undefined"
+                    newHasLink = true
+                    setFetchNow(false)
                 }
                 setLink(newLink)
                 setHasLink(newHasLink)
-                window.open(newLink)
+                if (linkExists) {
+
+                    window.open(newLink)
+                }
+
             }
         }
         )()
     }, [url_place, fetchNow])
-    return [link, hasLink, setLink]
+    return [link, hasLink, linkExists, setFetchNow]
 }
 
-const RestaurantResult = (props) => {
-    const {link} = props
-    return(
-    <Result {...props} renderAdditionalContent={<a href={link} target="_blank" className={props.className}><LanguageIcon></LanguageIcon></a>}></Result>
+export const RestaurantResult = (props) => {
+    const { link } = props
+
+    return (
+        <Result {...props} renderAdditionalContent={<a href={link} target="_blank" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>}></Result>
     )
 
 }
 
-const HotelResult = (props) => {
-    const {link} = props
-    return(
-    <Result {...props} renderAdditionalContent={<a href={link} target="_blank" className={props.className}><LanguageIcon></LanguageIcon></a>}></Result>
+export const HotelResult = (props) => {
+    const { link } = props
+    return (
+        <Result {...props} renderAdditionalContent={<a href={link} target="_blank" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>}></Result>
     )
 
 }
 
-const PlaceResult = (props) => {
+export const PlaceResult = (props) => {
     const { url_place } = props
-    const [fetchNow, setFetchNow] = useState(false)
-    const [link, hasLink] = useGooglePlaces(url_place, fetchNow)
+    const [link, hasLink, setFetchNow, linkExists] = useGooglePlaces(url_place)
     const onCardClick = () => {
         setFetchNow(true)
         // e.preventDefault()
     }
-    console.log({hasLink,fetchNow})
-    // console.log("hasLink",hasLink)
+    // console.log({ hasLink, fetchNow })
+    console.log("hasLink", hasLink)
+    let additionalContent
+    // debugger
+    console.table({hasLink,linkExists})
+    if (linkExists) {
+        additionalContent = <a href={link} target="_blank" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>
+    }
+    else if (hasLink) {
+
+        additionalContent = <span>No Link Found</span>
+    }
+    else {
+        additionalContent = <span onClick={onCardClick}><LanguageIcon></LanguageIcon></span>
+    }
 
     return (
-        <Result {...props} renderAdditionalContent= 
-             {hasLink ? <a href={link} target="_blank" className={props.className}><LanguageIcon></LanguageIcon></a> :  <span onClick={onCardClick} className={props.className}><LanguageIcon ></LanguageIcon></span>}></Result >
-        )
+        <Result {...props} renderAdditionalContent={additionalContent}></Result >
+    )
 }
 
 
 
-
-function Result(props) {
-    const classes = useCardStyles();
-    const { rating, name, image_url, review_count, price, renderAdditionalContent} = props
+export function Result(props) {
+    const { className, crop } = props
+    const smallerMatches = useMediaQuery('(max-width:400px)');
+    const classes = useCardStyles({ crop, smallerMatches });
+    const { rating, name, image_url, review_count, price, renderAdditionalContent } = props
+    // const [cardReady, setCardReady] = useState(false)
     let ratingStar = []
     for (let i = 1; i <= rating; i++) {
         ratingStar.push(1)
@@ -175,34 +251,41 @@ function Result(props) {
         <img src={image_url} alt={name}
             // image={image_url}
             title={name}
-            className={classes.media} />
+            className={classes.media}
+        // onLoad={() => {setCardReady(true)}}
+
+        />
 
     </div>)
 
-    
-return (
-    <div className={classes.card}>
-        {Image}
+    return (
+        <div className={[classes.card, className].join(" ")}>
+            {/* {cardReady ? "image displayed" : "card loading. please wait"} */}
+            {Image}
+            <div className={classes.info}>
+                <div className={classes.name}>
+                    <Typography variant="caption" gutterBottom>{name}</Typography>
+                    {/* <img src={airbnbIcon} alt="airbnb icon" className={classes.airbnb}></img> */}
 
-        <div className={classes.info}>
-            <Typography variant="caption" gutterBottom>{name} <span className={classes.price}> <Typography variant='body2'> {price} </Typography> </span></Typography>
-            <Typography variant="body2" gutterBottom >
-                <div className={classes.rating}>
-                    {ratingStar.map((rating, index) => rating === 1 ?
-                        <StarIcon key={index} className={classes.icons}> </StarIcon> : <StarHalfIcon key={index} className={classes.icons}> </StarHalfIcon>)}
-                    {missingStars}
                 </div>
-                <div>
-                    {review_count} reviews
-                            <div>
+                <Typography variant="caption"><span className={classes.price}> <Typography variant='body2'> {price} </Typography> </span></Typography>
+                <Typography variant="body2" gutterBottom className={classes.responsiveText}>
+                    <div className={classes.rating}>
+                        {ratingStar.map((rating, index) => rating === 1 ?
+                            <StarIcon key={index} className={classes.icons}> </StarIcon> : <StarHalfIcon key={index} className={classes.icons}> </StarHalfIcon>)}
+                        {missingStars}
                     </div>
-                </div>
-            </Typography>
-            {renderAdditionalContent}
-        </div>
+                    <div>
+                        {review_count} reviews
+                            <div>
+                        </div>
+                    </div>
+                </Typography>
+                {renderAdditionalContent}
+            </div>
 
-    </div>
-)
+        </div>
+    )
 }
 
 
@@ -224,6 +307,17 @@ export function Results(props) {
     const selected = getSelected(buttons)
     const [loading, data, setLoading] = useFetch(`http://127.0.0.1:5000/${selected}?location=` + props.location.state.location)
 
+    const Buttons = (
+        <div>
+            <ButtonGroup size="large" className={classes.buttonGroup}>
+                <Button className={buttons["restaurants"] ? classes.buttonClicked : classes.buttonUnclicked} onClick={createButtonHandler("restaurants")} disableElevation>Restaurants</Button>
+                <Button className={buttons["hotels"] ? classes.buttonClicked : classes.buttonUnclicked} onClick={createButtonHandler("hotels")} disableElevation>Hotels</Button>
+                <Button className={buttons["places"] ? classes.buttonClicked : classes.buttonUnclicked} onClick={createButtonHandler("places")} disableElevation>Places</Button>
+            </ButtonGroup>
+
+        </div>
+
+    )
     function createButtonHandler(buttonName) {
         function handleClick() {
             setButton(() => {
@@ -237,7 +331,7 @@ export function Results(props) {
                 return newButtons
             },
 
-            setLoading(true)
+                setLoading(true)
 
             )
         }
@@ -247,27 +341,28 @@ export function Results(props) {
     if (loading) {
         return (
             <>
-             <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
-                <div>
-                    <ButtonGroup size="medium" color="primary" className={classes.buttonGroup}>
-                        <Button variant={buttons["restaurants"] ? "contained" : "outlined"} onClick={createButtonHandler("restaurants")}>Restaurants</Button>
-                        <Button variant={buttons["hotels"] ? "contained" : "outlined"} onClick={createButtonHandler("hotels")} >Hotels</Button>
-                        <Button variant={buttons["places"] ? "contained" : "outlined"} onClick={createButtonHandler("places")}>Places</Button>
-                    </ButtonGroup>
+                <NavBar className={classes.navbar}></NavBar>
+                <div className={classes.loadingPage}>
 
-                </div>
+                    <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
                     <Loader />
-                    </>)
+                    {Buttons}
+                </div>
+            </>)
     }
     else {
 
         let numCols
+
         if (smallerMatches) {
             numCols = 1
+
         } else if (matches) {
             numCols = 2
+
         } else {
             numCols = 5
+
         }
 
         const reverseIndex = (i) => {
@@ -285,40 +380,36 @@ export function Results(props) {
 
 
         for (let i = 0; i < data.length; i++) {
-                const [x, y] = reverseIndex(i)
+            const [x, y] = reverseIndex(i)
             columns[x][y] = data[i]
-            }
-
+        }
 
         return (
             <>
-                <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
-                <div>
-                    <ButtonGroup size="medium" color="primary" className={classes.buttonGroup}>
-                        <Button variant={buttons["restaurants"] ? "contained" : "outlined"} onClick={createButtonHandler("restaurants")}>Restaurants</Button>
-                        <Button variant={buttons["hotels"] ? "contained" : "outlined"} onClick={createButtonHandler("hotels")} >Hotels</Button>
-                        <Button variant={buttons["places"] ? "contained" : "outlined"} onClick={createButtonHandler("places")}>Places</Button>
-                    </ButtonGroup>
+                <div className={classes.resultPage}>
 
-                </div>
-                <div className={classes.subtitle}>{data.length} places found in {cityName}</div>
+                    <div className={classes.header}>Take a look at your next adventure in <span className={classes.bold}>{cityName}</span></div>
+                    {Buttons}
+                    <div className={classes.subtitle}>{data.length} places found in {cityName}</div>
+
+                    <NavBar></NavBar>
+
+                    <div className={classes.row}>
+
+                        {columns.map(col => (
+                            <div className={classes.column}>
+                                {col.map((element, index) => (
+                                    <>
+                                        {buttons["hotels"] ? <HotelResult key={index} {...element} className={classes.colored}></HotelResult> : null}
+                                        {buttons["restaurants"] ? <RestaurantResult key={index} {...element} className={classes.colored}></RestaurantResult> : null}
+                                        {buttons["places"] ? <PlaceResult key={index} {...element} className={classes.colored}></PlaceResult> : null}
+                                    </>
 
 
-                <div className={classes.row}>
-
-                  {columns.map(col => (
-                        <div className={classes.column}>
-                            {col.map((element, index) => (
-                                <>
-                                {buttons["hotels"] ? <HotelResult key={index} {...element} className={classes.colored}></HotelResult> : null}
-                                {buttons["restaurants"] ? <RestaurantResult key={index} {...element} className={classes.colored}></RestaurantResult> : null}
-                                {buttons["places"] ? <PlaceResult key={index} {...element} className={classes.colored}></PlaceResult> : null}
-                                </>
-                                
-            
-                            ))}
-                        </div>
-                    ))}
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </>
         )

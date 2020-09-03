@@ -1,6 +1,7 @@
 import requests
 import json
 import bs4
+import html
 import re
 
 
@@ -25,7 +26,7 @@ def scrape_airbnb(location):
         title = re.findall(r"content=\"(.+) - null", listing_html)
         # print(title)
         if len(title) != 0:
-            name = title[0]
+            name = html.unescape(title[0])
             # name = title[0]
             
             rating_regex = re.findall(r"Rating ([0-9]\.([0-9]+)) out of 5", listing_html)
