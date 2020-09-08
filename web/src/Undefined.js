@@ -30,7 +30,7 @@ export const Undefined = () => {
     return (
         <>
             <div className={classes.container}>
-                <img src={headerImage} className={classes.icon}></img>
+                <img src={headerImage} alt="header" className={classes.icon}></img>
                 <div className={classes.mainTitle}>
                     Error 404
         </div>

@@ -1,19 +1,27 @@
 import json
 import requests_html
+import requests
 import re
 import bs4
 import asyncio
 import html
 import time
 from tqdm import tqdm
+from bs4 import BeautifulSoup
 
 session = requests_html.HTMLSession()
-session.browser
+
+# def get_links(resp):
+#     soup = BeautifulSoup(resp.text,"html.parser")
+#     links = soup.find_all("a",href=True)
+#     return [link["href"] for link in links]
+
 
 def create_url(location):
     url = f"https://www.google.com/search?q={location}+places"
+    # resp = requests.get(url)
     resp = session.get(url)
-    links = resp.html.links
+    links = resp.html.links 
     for link in links:
         location_link = re.findall(r"(\/m\/.*?)&", link)
         if len(location_link) != 0:
@@ -21,11 +29,11 @@ def create_url(location):
             return locationID
      
 def handle_link_with_retries(url, retries = 3):
-    resp = session.get(url)
+    resp = requests.get(url)
    
     while retries > 0:
         try:
-            resp = session.get(url)
+            resp = requests.get(url)
             print("returning resp")
             return resp
         except Exception as e:

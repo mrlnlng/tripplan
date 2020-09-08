@@ -3,6 +3,7 @@ import re
 import bs4
 import requests_html
 import urllib.parse
+import requests
 
 session = requests_html.HTMLSession()
 
@@ -11,7 +12,7 @@ def handle_link_with_retries(url, retries=3):
     # print(decoded_url)
     while retries > 0:
         try:
-            resp = session.get(str(decoded_url))
+            resp = requests.get(str(decoded_url))
             return resp
         except Exception as e:
             print(f"Error with {decoded_url} : {e}")

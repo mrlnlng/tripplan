@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import SearchIcon from '@material-ui/icons/Search';
 import { Link } from "react-router-dom"
-import Search from "./Search";
+// import Search from "./Search";
 import { SearchButton } from "./Search"
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 const useStyle = makeStyles((theme) => (
@@ -112,17 +112,17 @@ const useStyle = makeStyles((theme) => (
     // console.log(elements.selectedButtons)
     const [location, setLocation] = useState("")
     const [suggestions, setSuggestions] = useState([])
-    const [hovered, setHovered] = useState(false)
+    // const [hovered, setHovered] = useState(false)
     const [input, setInput] = useState("")
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [inputState, setinputState] = useState(true)
-    const [searchState, setSearchState] =  useState(false)
+    // const [searchState, setSearchState] =  useState(false)
     const classes = useStyle(elements)
     var myHeaders = new Headers();
-    
+    // console.log("This is props.location", location) 
     myHeaders.append("Content-Type", "application/json");
     const hitsPerPage = 5
-    const lastIndexSuggestions = hitsPerPage - 1
+    // const lastIndexSuggestions = hitsPerPage - 1
     var raw = JSON.stringify({ "query": `${input}`, "type": "city", "language": "en", "aroundLatLngViaIP": false, "hitsPerPage": hitsPerPage });
     
     var requestOptions = {
@@ -141,16 +141,16 @@ const useStyle = makeStyles((theme) => (
             // let resp = await fetch(`https://places-.algolianet.com/1/places/query`, requestOptions)
             let arrayInfoSuggestions
             if (resp.ok) {
-                console.log(input)
+                // console.log(input)
                 let json = await resp.json()
                 let arrayResp = json["hits"]
-                console.log(arrayResp)
+                // console.log(arrayResp)
                 const arraySuggestions = arrayResp.filter(resp => resp["_highlightResult"]["locale_names"][0]["matchLevel"] === "full")
                 arrayInfoSuggestions = arraySuggestions.map(element => {
                     return `${element["locale_names"][0]}, ${element["administrative"][0]}, ${element["country"]}`
                     // return { "city": element["locale_names"][0], "administrative": element["administrative"][0], "country": element["country"] }
                 })
-                console.log("its okay!")
+                // console.log("its okay!")
                 // console.log(arrayInfoSuggestions)
                 
                 
@@ -228,7 +228,7 @@ const useStyle = makeStyles((theme) => (
                         <input
                             type="text"
                             placeholder="Where to?"
-                            value={location}
+                            value={location || ''}
                             name="getridofchromeautocompletewithgiberrish-asldkajsldkajsdkaj-location"
                             autoComplete="chrome-off"
                             className={classes.input}

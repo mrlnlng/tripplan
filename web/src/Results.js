@@ -11,7 +11,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import useFetch from './withFetch'
 import Loader from "./Loader"
 import NavBar from "./NavBar"
-import airbnbIcon from "./airbnb.png"
+// import airbnbIcon from "./airbnb.png"
 
 export const useStyles = makeStyles(theme => ({
     result: {
@@ -154,7 +154,7 @@ const useGooglePlaces = (url_place) => {
                 console.log(`Fetching url for ${url_place}`)
                 let response = await fetch(url)
                 let json = await response.json()
-                console.log(json)
+                // console.log(json)
 
 
                 if (json !== null) {
@@ -162,7 +162,7 @@ const useGooglePlaces = (url_place) => {
                     newHasLink = true
                     setFetchNow(false)
                     setLinkExists(true)
-                    console.log("Found new link", newLink)
+                    // console.log("Found new link", newLink)
                 }
                 else {
                     newLink = "http://localhost:3000/undefined"
@@ -172,8 +172,8 @@ const useGooglePlaces = (url_place) => {
                 setLink(newLink)
                 setHasLink(newHasLink)
                 if (linkExists) {
-
                     window.open(newLink)
+    
                 }
 
             }
@@ -187,7 +187,7 @@ export const RestaurantResult = (props) => {
     const { link } = props
 
     return (
-        <Result {...props} renderAdditionalContent={<a href={link} target="_blank" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>}></Result>
+        <Result {...props} renderAdditionalContent={<a href={link} target="_blank"  rel="noopener noreferrer" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>}></Result>
     )
 
 }
@@ -195,7 +195,7 @@ export const RestaurantResult = (props) => {
 export const HotelResult = (props) => {
     const { link } = props
     return (
-        <Result {...props} renderAdditionalContent={<a href={link} target="_blank" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>}></Result>
+        <Result {...props} renderAdditionalContent={<a href={link} target="_blank"   rel="noopener noreferrer" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>}></Result>
     )
 
 }
@@ -203,29 +203,32 @@ export const HotelResult = (props) => {
 export const PlaceResult = (props) => {
     const { url_place } = props
     const [link, hasLink, setFetchNow, linkExists] = useGooglePlaces(url_place)
+    console.log(link)
     const onCardClick = () => {
         setFetchNow(true)
         // e.preventDefault()
     }
     // console.log({ hasLink, fetchNow })
-    console.log("hasLink", hasLink)
+    // console.log("hasLink", hasLink)
     let additionalContent
     // debugger
-    console.table({hasLink,linkExists})
+    // console.table({hasLink,linkExists})
     if (linkExists) {
-        additionalContent = <a href={link} target="_blank" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>
+        additionalContent = <a href={link} target="_blank"  rel="noopener noreferrer" style={{ color: "grey" }}><LanguageIcon></LanguageIcon></a>
     }
     else if (hasLink) {
-
-        additionalContent = <span>No Link Found</span>
+        additionalContent = <span>No Website Found</span>
     }
     else {
         additionalContent = <span onClick={onCardClick}><LanguageIcon></LanguageIcon></span>
     }
 
     return (
-        <Result {...props} renderAdditionalContent={additionalContent}></Result >
+        // <Result {...props} renderAdditionalContent={additionalContent}></Result >
+        <Result {...props}></Result>
+        // <Result {...props} renderAdditionalContent={<a href="localhost:3000/undefined" target="_blank" ><LanguageIcon></LanguageIcon></a>}></Result >
     )
+
 }
 
 
@@ -245,7 +248,7 @@ export function Result(props) {
     }
 
     const missingStarsNum = 5 - ratingStar.length
-    const missingStars = Array(missingStarsNum).fill().map(() => (<StarBorderIcon className={classes.icons}></StarBorderIcon>))
+    const missingStars = Array(missingStarsNum).fill().map((_,index) => (<StarBorderIcon key={index} className={classes.icons}></StarBorderIcon>))
 
     const Image = (<div>
         <img src={image_url} alt={name}
@@ -264,12 +267,12 @@ export function Result(props) {
             {Image}
             <div className={classes.info}>
                 <div className={classes.name}>
-                    <Typography variant="caption" gutterBottom>{name}</Typography>
+                    <Typography component={'span'} variant="caption" gutterBottom>{name}</Typography>
                     {/* <img src={airbnbIcon} alt="airbnb icon" className={classes.airbnb}></img> */}
 
                 </div>
-                <Typography variant="caption"><span className={classes.price}> <Typography variant='body2'> {price} </Typography> </span></Typography>
-                <Typography variant="body2" gutterBottom className={classes.responsiveText}>
+                <Typography component={'span'} variant="caption"><span className={classes.price}> <Typography component={'span'} variant='body2'> {price} </Typography> </span></Typography>
+                <Typography component = {'span'} variant="body2" gutterBottom className={classes.responsiveText}>
                     <div className={classes.rating}>
                         {ratingStar.map((rating, index) => rating === 1 ?
                             <StarIcon key={index} className={classes.icons}> </StarIcon> : <StarHalfIcon key={index} className={classes.icons}> </StarHalfIcon>)}
@@ -396,14 +399,14 @@ export function Results(props) {
 
                     <div className={classes.row}>
 
-                        {columns.map(col => (
-                            <div className={classes.column}>
+                        {columns.map((col, index) => (
+                            <div className={classes.column} key={index}>
                                 {col.map((element, index) => (
-                                    <>
-                                        {buttons["hotels"] ? <HotelResult key={index} {...element} className={classes.colored}></HotelResult> : null}
-                                        {buttons["restaurants"] ? <RestaurantResult key={index} {...element} className={classes.colored}></RestaurantResult> : null}
-                                        {buttons["places"] ? <PlaceResult key={index} {...element} className={classes.colored}></PlaceResult> : null}
-                                    </>
+                                    < div key={index}>
+                                        {buttons["hotels"] ? <HotelResult {...element} className={classes.colored}></HotelResult> : null}
+                                        {buttons["restaurants"] ? <RestaurantResult {...element} className={classes.colored}></RestaurantResult> : null}
+                                        {buttons["places"] ? <PlaceResult {...element} className={classes.colored}></PlaceResult> : null}
+                                    </div>
 
 
                                 ))}

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from "@material-ui/styles"
-import { styled } from "@material-ui/styles"
-import { Link } from "react-router-dom"
-import Header from './Header.js'
+// import { styled } from "@material-ui/styles"
+// import { Link } from "react-router-dom"
+// import Header from './Header.js'
 import headerImage from "./header.png"
 import background from './background.jpg'
-import SearchIcon from '@material-ui/icons/Search';
+// import SearchIcon from '@material-ui/icons/Search';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { Result, HotelResult, PlaceResult, RestaurantResult } from './Results'
-import { useFetch } from './withFetch'
+import { HotelResult, PlaceResult, RestaurantResult } from './Results'
+// import { useFetch } from './withFetch'
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Autocomplete from "./Autocomplete"
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -457,7 +457,7 @@ export function Search() {
             <div className={classes.searchPage}>
 
                 <div className={classes.crop}>
-                    <img src={background} className={classes.background}></img>
+                    <img src={background} className={classes.background} alt="background"></img>
                     {/* <Header/> */}
                 </div>
 
@@ -465,7 +465,7 @@ export function Search() {
                     <div className={classes.mainMenu}>
 
                         <div className={classes.title}>
-                            <img src={headerImage} className={classes.logo}></img>
+                            <img src={headerImage} className={classes.logo} alt="logo"></img>
                             <div className={classes.name}>TRIP PLAN</div>
                             <div className={classes.underline}></div>
                         </div>
