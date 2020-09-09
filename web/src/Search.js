@@ -14,6 +14,7 @@ import { HotelResult, PlaceResult, RestaurantResult } from './Results'
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Autocomplete from "./Autocomplete"
 import Skeleton from '@material-ui/lab/Skeleton';
+import { BACKEND } from './Configuration';
 
 
 const TopCard = ({ data, destinationOption }) => {
@@ -379,7 +380,7 @@ export function Search() {
     const fetchNewCard = async () => {
         let response
         const [newDestinationOption, newChosenCity] = randomizeCard()
-        response = await fetch(`http://127.0.0.1:5000/${newDestinationOption}?location=${newChosenCity}`)
+        response = await fetch(`${BACKEND}/${newDestinationOption}?location=${newChosenCity}`)
         return response
     }
     const setAllCards = async () => {
@@ -396,7 +397,7 @@ export function Search() {
 
         }
         (async function () {
-            let responses = await Promise.all(newRandomCards.map(({ destinationOption, chosenCity }) => fetch(`http://127.0.0.1:5000/${destinationOption}?location=${chosenCity}`)))
+            let responses = await Promise.all(newRandomCards.map(({ destinationOption, chosenCity }) => fetch(`${BACKEND}/${destinationOption}?location=${chosenCity}`)))
             let datas = await Promise.all(responses.map(async response => {
                 while (!response.ok) {
                     response = await fetchNewCard()

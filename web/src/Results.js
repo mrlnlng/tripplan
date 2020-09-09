@@ -11,6 +11,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import useFetch from './withFetch'
 import Loader from "./Loader"
 import NavBar from "./NavBar"
+import { BACKEND } from './Configuration';
 // import airbnbIcon from "./airbnb.png"
 
 export const useStyles = makeStyles(theme => ({
@@ -138,7 +139,7 @@ const useCardStyles = makeStyles({
 
 const useGooglePlaces = (url_place) => {
     const encodedUrl = encodeURIComponent(url_place)
-    const url = `http://127.0.0.1:5000/places/google?l=` + encodedUrl
+    const url = `${BACKEND}/places/google?l=` + encodedUrl
     // console.log(url)
     const [link, setLink] = useState("")
     const [hasLink, setHasLink] = useState(false)
@@ -165,7 +166,7 @@ const useGooglePlaces = (url_place) => {
                     // console.log("Found new link", newLink)
                 }
                 else {
-                    newLink = "http://localhost:3000/undefined"
+                    newLink = `${BACKEND}/undefined`
                     newHasLink = true
                     setFetchNow(false)
                 }
@@ -308,7 +309,7 @@ export function Results(props) {
     const smallerMatches = useMediaQuery('(max-width:400px)');
     const [buttons, setButton] = useState(selectedButtons)
     const selected = getSelected(buttons)
-    const [loading, data, setLoading] = useFetch(`http://127.0.0.1:5000/${selected}?location=` + props.location.state.location)
+    const [loading, data, setLoading] = useFetch(`${BACKEND}/${selected}?location=` + props.location.state.location)
 
     const Buttons = (
         <div>
