@@ -15,7 +15,7 @@ def scrape_airbnb(location):
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
 
     information_list = []
-    
+
     for listing in soup.findAll("div",{"itemprop" : "itemListElement"}):
         string = listing.text.replace("SUPERHOST", "")
         listing_html = listing.prettify()
@@ -23,7 +23,7 @@ def scrape_airbnb(location):
         link_element = listing.a   
         link_path = link_element.get('href')
         link = f"https://www.airbnb.com{link_path}"
-        title = re.findall(r"content=\"(.+) - null", listing_html)
+        title = re.findall(r"content=\"(.+)\" itemprop=", listing_html)
         # print(title)
         if len(title) != 0:
             name = html.unescape(title[0])

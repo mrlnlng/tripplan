@@ -20,6 +20,9 @@ import { BACKEND } from './Configuration';
 const TopCard = ({ data, destinationOption }) => {
     let props
     if (data !== undefined) {
+        console.log(data)
+        console.log(data[0])
+        debugger
         props = JSON.parse(JSON.stringify(data[0]))
     }
 
@@ -425,7 +428,7 @@ export function Search() {
     useEffect(() => {
         const shuffleCards = setTimeout(() => {
             setAllCards()
-        }, 10000)
+        }, 100000)
         return () => clearTimeout(shuffleCards)
 
     }, [numberCards, randomCards])
@@ -452,7 +455,7 @@ export function Search() {
         return buttonHandler
     }
 
-    console.table(randomCards)
+    // console.table(randomCards)
     return (
         <>
             <div className={classes.searchPage}>

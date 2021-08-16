@@ -22,10 +22,6 @@ def handle_restaurants():
 @app.route('/hotels')
 def handle_airbnb():
     location = request.full_path.split("=")[-1]
-    
-    
-    # businesses_info = scrape_restaurant()
-    # return json.dumps(businesses_info)
     return json.dumps(scrape_airbnb(location))
 
 @app.route('/places')

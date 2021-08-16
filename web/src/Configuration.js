@@ -1,1 +1,1 @@
-export const BACKEND = window.location.host === "localhost" ? "127.0.0.1:5000" : "https://tripplan-backend.herokuapp.com"
+export const BACKEND = window.location.hostname === "localhost" ? "http://127.0.0.1:5000" : "https://tripplan-backend.herokuapp.com"
