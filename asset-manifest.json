@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/tripplan/static/css/main.98879411.chunk.css",
+    "main.js": "/tripplan/static/js/main.d6b1ca2e.chunk.js",
+    "main.js.map": "/tripplan/static/js/main.d6b1ca2e.chunk.js.map",
+    "runtime-main.js": "/tripplan/static/js/runtime-main.74a7625f.js",
+    "runtime-main.js.map": "/tripplan/static/js/runtime-main.74a7625f.js.map",
+    "static/css/2.d97600f8.chunk.css": "/tripplan/static/css/2.d97600f8.chunk.css",
+    "static/js/2.4176f4ee.chunk.js": "/tripplan/static/js/2.4176f4ee.chunk.js",
+    "static/js/2.4176f4ee.chunk.js.map": "/tripplan/static/js/2.4176f4ee.chunk.js.map",
+    "index.html": "/tripplan/index.html",
+    "precache-manifest.d35713adea39f36ae36fe934b10b69ad.js": "/tripplan/precache-manifest.d35713adea39f36ae36fe934b10b69ad.js",
+    "service-worker.js": "/tripplan/service-worker.js",
+    "static/css/2.d97600f8.chunk.css.map": "/tripplan/static/css/2.d97600f8.chunk.css.map",
+    "static/css/main.98879411.chunk.css.map": "/tripplan/static/css/main.98879411.chunk.css.map",
+    "static/js/2.4176f4ee.chunk.js.LICENSE.txt": "/tripplan/static/js/2.4176f4ee.chunk.js.LICENSE.txt",
+    "static/media/background.jpg": "/tripplan/static/media/background.b1a603d3.jpg",
+    "static/media/header.png": "/tripplan/static/media/header.50443b6c.png",
+    "static/media/tripplanBlue.png": "/tripplan/static/media/tripplanBlue.ae2789ca.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.74a7625f.js",
+    "static/css/2.d97600f8.chunk.css",
+    "static/js/2.4176f4ee.chunk.js",
+    "static/css/main.98879411.chunk.css",
+    "static/js/main.d6b1ca2e.chunk.js"
+  ]
+}
